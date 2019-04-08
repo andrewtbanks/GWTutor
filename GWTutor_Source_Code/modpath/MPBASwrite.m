@@ -1,0 +1,61 @@
+function [] = MPBASwrite(MFstruct,MPstruct)
+% Writes MPBAS -Modpath basic discretization file
+% consult MODPATH 6  documentation for description of file formatting. 
+% data is written from input structure (MPstruct) into MPBAS file 
+
+filename=MPstruct.MPNAM.filename;
+
+DIM=MFstruct.DIS.DIM;
+NLAY=MFstruct.DIS.NLAY;
+NCOL=MFstruct.DIS.NCOL;
+NROW=MFstruct.DIS.NROW;
+
+HNOFLO=MFstruct.BA6.HNOFLO;
+HDRY=MFstruct.BA6.HDRY;
+LAYTYP=MFstruct.LPF.LAYTYP;
+NLAY=MFstruct.DIS.NLAY;
+IBOUND=MFstruct.BA6.IBOUND';
+
+IFACE=MPstruct.MPBAS.IFACE;
+POR=MPstruct.MPBAS.POR;
+%%
+filepath=strjoin({pwd,filename,filename},'\');
+fname = [filepath,'.mpbas'];
+fid=fopen(fname,'wt');
+
+r1=['#MODPATH basic data file for ',filename];
+r2=[num2str(HNOFLO),' ',num2str(HDRY),'         HNOFLO HDRY'];
+r3=[num2str(IFACE),'                 DEFAULT IFACE COUNT'];
+r4=[num2str(LAYTYP),'               LAYTYP'];  
+
+fprintf(fid,'%s',r1); fprintf(fid,'\n');
+fprintf(fid,'%s',r2); fprintf(fid,'\n');
+fprintf(fid,'%s',r3); fprintf(fid,'\n');
+fprintf(fid,'%s',r4); fprintf(fid,'\n');
+
+
+IBDspecMF=strcat('I3');
+IBDspec=strcat(repmat('%3i',1,NCOL),' \n');
+
+for i=1:NLAY
+    r5=['INTERNAL    1  (',IBDspecMF,')   ',num2str(NCOL),' IBOUND layer  ',num2str(i)];
+    fprintf(fid,'%s',r5); fprintf(fid,'\n');  
+    fprintf(fid,'%3i \n',IBOUND(:,:,i)); %write IBOUND array 
+end
+
+
+for i=1:NLAY
+    r6=['CONSTANT ',num2str(POR(i)),' POROSITY LAYER ',num2str(i)];
+    fprintf(fid,'%s',r6); fprintf(fid,'\n');
+end
+PORspecMF=strcat(num2str(NCOL),'E16.9');
+PORspec=strcat(repmat(' %16.9E',1,NCOL),' \n');
+
+for i=1:NLAY
+r7=['INTERNAL  1.0 (E16.9)   0 POROSITY layer  ',num2str(i)];%precision 16.9E
+fprintf(fid,'%s',r7); fprintf(fid,'\n');
+fprintf(fid,'%16.9E\n',POR); %write X (IC's)
+end
+
+status=fclose(fid);
+end

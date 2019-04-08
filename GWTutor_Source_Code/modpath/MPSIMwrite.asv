@@ -1,0 +1,139 @@
+function [] = MPSIMwrite(MFstruct,MPstruct)
+% Writes MPSIM -Modpath simulation file
+% consult MODPATH 6  documentation for description of file formatting. 
+% data is written from input structure (MPstruct) into MPSIM file 
+
+% load relevant 
+NSTP=MFstruct.DIS.NSTP;
+PERLEN=MFstruct.DIS.PERLEN; %stress period length
+NLAY=MFstruct.DIS.NLAY; %num layers
+NCOL = MFstruct.DIS.NCOL %num cols
+
+ZONES = MPstruct.MPSIM.ZONES; %stop zone data
+STOPZONE = MPstruct.MPSIM.STOPZONE;
+
+RELEASETIME=MPstruct.MPSIM.RELEASETIME; %Particle group release time 
+REFTIME=MPstruct.MPSIM.REFTIME; %Refrence time to begin tracking particle.
+
+STOPTIMEOPTION=MPstruct.MPSIM.STOPTIMEOPTION;
+if STOPTIMEOPTION==3
+    STOPTIME=MPstruct.MPSIM.STOPTIME; %time to stop tracking the particle.
+end 
+
+TIMEPOINTOPTION=MPstruct.MPSIM.TIMEPOINTOPTION;
+if TIMEPOINTOPTION==1;
+    NTIMEPOINTS=MPstruct.MPSIM.NTIMEPOINTS;
+    TIMESTEP=MPstruct.MPSIM.TIMESTEP;
+elseif TIMEPOINTOPTION==2
+    TIMEPOINTS=MPstruct.MPSIM.TIMEPOINTS;
+end
+
+
+
+TRACKINGDIR=MPstruct.MPSIM.TRACKINGDIR;
+
+
+
+if isequal(TRACKINGDIR,'for')==1
+    TRACKINGDIR=1;
+elseif isequal(TRACKINGDIR,'back')==1
+    TRACKINGDIR=2;
+end
+
+%%
+filename=MPstruct.MPNAM.filename;
+filepath=strjoin({pwd,filename,filename},'\');
+fname=[filepath,'.mpsim'];
+fid=fopen(fname,'wt');
+
+
+r1=[filename,'.mpnam'];
+r2=[filename,'.mplist'];
+
+r3=['4 ',num2str(TRACKINGDIR),' 1 1 0 1'];
+r4=[filename,'.endpoint'];
+r5=[filename,'.pathline'];
+r6=[filename,'.timeseries'];
+r7=[filename,'.trace'];
+r8='1 12'; %trace particle group and trace particle id
+r9='0'; %budget cell count
+%r10='156 174';
+r11='1 Reference Time Option';
+r12=num2str(REFTIME);
+
+fprintf(fid,'%s',r1); fprintf(fid,'\n');
+fprintf(fid,'%s',r2); fprintf(fid,'\n');
+fprintf(fid,'%s',r3); fprintf(fid,'\n');
+fprintf(fid,'%s',r4); fprintf(fid,'\n');
+fprintf(fid,'%s',r5); fprintf(fid,'\n');
+fprintf(fid,'%s',r6); fprintf(fid,'\n');
+fprintf(fid,'%s',r7); fprintf(fid,'\n');
+fprintf(fid,'%s',r8); fprintf(fid,'\n');
+fprintf(fid,'%s',r9); fprintf(fid,'\n');
+%fprintf(fid,'%s',r10); fprintf(fid,'\n');
+fprintf(fid,'%s',r11); fprintf(fid,'\n');
+fprintf(fid,'%s',r12); fprintf(fid,'\n');
+
+
+r13=[num2str(STOPTIMEOPTION),' Stop Time Option'];
+fprintf(fid,'%s',r13); fprintf(fid,'\n');
+if STOPTIMEOPTION==3
+    r14=num2str(STOPTIME);
+    fprintf(fid,'%s',r14); fprintf(fid,'\n');
+end
+
+r15=[num2str(TIMEPOINTOPTION),' Time Point Option'];
+fprintf(fid,'%s',r15); fprintf(fid,'\n');
+if TIMEPOINTOPTION==1
+    r16=[num2str(NTIMEPOINTS),' ',num2str(TIMESTEP)]; %time points 
+    fprintf(fid,'%s',r16); fprintf(fid,'\n');
+elseif TIMEPOINTOPTION==2
+    r16a=[num2str(length(TIMEPOINTS))];
+%      r16b=['INTERNAL 1 (FREE) 0']
+    r16c=TIMEPOINTS;
+    fprintf(fid,'%s',r16a); fprintf(fid,'\n');
+%      fprintf(fid,'%s',r16b); fprintf(fid,'\n');
+    fprintf(fid,repmat('%d ',1,length(TIMEPOINTS)),r16c); fprintf(fid,'\n');
+end
+r17=['2 Zone Data Option'];
+r18=[num2str(STOPZONE),'  Stop Zone'];
+fprintf(fid,'%s',r17); fprintf(fid,'\n');
+fprintf(fid,'%s',r18); fprintf(fid,'\n');
+ZONEspecMF=strcat('I3');
+ZONEspec=strcat(repmat('%3i',1,NCOL),' \n');
+
+for i=1:NLAY
+    r19=['INTERNAL    1  (',ZONEspecMF,')   ',num2str(NCOL),' ZONE layer  ',num2str(i)];
+     fprintf(fid,'%s',r19); fprintf(fid,'\n');  
+     fprintf(fid,'%3i \n',ZONES(:,:,i)); %write ZONE array 
+%     fprintf(fid,'%3i ',ZONES(:,:,i)); %write ZONE array 
+end
+
+%  for i=1:NLAY
+%      r19=['CONSTANT 1 '];
+%      fprintf(fid,'%s',r19); fprintf(fid,'\n');
+%  end
+%  
+
+r20=['1 Retardation Factor Option'];
+r21=['1 Particle Group Count'];
+r22=['PG1'];
+r23=['1 ReleaseOption'];
+r24=[num2str(RELEASETIME)];%release time
+r25=['external ',filename,'.sloc'];
+
+
+
+
+
+fprintf(fid,'%s',r20); fprintf(fid,'\n');
+fprintf(fid,'%s',r21); fprintf(fid,'\n');
+fprintf(fid,'%s',r22); fprintf(fid,'\n');
+fprintf(fid,'%s',r23); fprintf(fid,'\n');
+fprintf(fid,'%s',r24); fprintf(fid,'\n');
+fprintf(fid,'%s',r25); fprintf(fid,'\n');
+status=fclose(fid);
+end
+
+
+
