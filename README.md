@@ -9,9 +9,9 @@ This repository contains the source code along with standalone executables for r
 
 The standalone execuatble for GWTutor is contained in the directory /GWTutor. Download this entire directory to your computer and exectue GWTutor.exe
 
-The Installation process will start automatically. 
+The Installation process will start automatically. You will need administrative privledges on the computer to install GWTutor (which includes the MATLAB RUNTIME 2017a support library) 
 
-Standalone executables GWTutor.exe requires installation of MATLAB RUNTIME 2017.  This is compiled with GWTutor.exe, but is also free to download at https://www.mathworks.com/products/compiler/matlab-runtime.html. 
+The Standalone executable GWTutor.exe requires installation of MATLAB RUNTIME 2017.  This is compiled with GWTutor.exe and will be installed as part of the GWTutor installation process. It is also free to download at https://www.mathworks.com/products/compiler/matlab-runtime.html. 
 
 
 
