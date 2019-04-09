@@ -1,4 +1,4 @@
-# GWTutor - interactive computer module for groundwater education
+# GWTutor - an interactive computer module for groundwater education
 # Developed by Andy T. Banks and Mary C. Hill
 # University of Kansas - Department of Geology 
 
