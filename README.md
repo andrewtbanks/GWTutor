@@ -14,6 +14,24 @@ The Installation process will start automatically. You will need administrative 
 The standalone executable GWTutor.exe requires installation of MATLAB RUNTIME 2017.  This is compiled with GWTutor.exe and will be installed as part of the GWTutor installation process. It is also free to download at https://www.mathworks.com/products/compiler/matlab-runtime.html. 
 
 
+_______________________________________________________________
+SOURCE CODE 
+
+Navigate to /GWTutor_Source_Code
+
+GWTutor_INPUT_GUI.m is the main function - execute this to run GWTutor in MATLAB
+
+GWTutor_OUTPUT_GUI.m is a function called in GWTutor_INPUT_GUI.m which runs the MODFLOW and MODPATH models and provides the GUI for visualizing model results. 
+
+The directory /modflow contains the support codes that format user input into MODFLOW 2005 input files
+
+The directory /modpath contains the support codes that format user input into MODPATH 6 input files
+
+The directory /gui_ex1 contains an example of MODPATH and MODFLOW input and output files produced by GWtutor 
+
+The script draw_polys.m is used to generate the polygons representing model cells in the GUI
+
+
 
 
 
