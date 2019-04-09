@@ -1,10 +1,10 @@
 function [ struct ] = Format_Modpath( in )
-% formats input data from GUI into a strucutre readable by functions that
-% write MODPATH input files. 
-
-% data is sorted based on what modflow input files it corresponds to 
-% variable names in the output strucutre(struct) match very closely to what is
-% used in the MODPATH 6 documentation.
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Function formats input data from GUI into a strucutre readable by functions that write MODPATH input files. 
+% Data is sorted based on what modflow input files it corresponds to 
+% Variable names in the output structure(struct) match very closely to what is used in the MODPATH 6 documentation.
 
 %% SPECIFY IF MODPATH IS EXECUTED BY SHELL
 struct.ShellFlag=in.ShellFlag;

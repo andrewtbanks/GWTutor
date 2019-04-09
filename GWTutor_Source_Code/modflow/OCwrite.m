@@ -1,7 +1,10 @@
 function [  ] = OCwrite(struct)
-% write output control file
-% consult MODFLOW 2005 documentation for description of file formatting. 
-% data is written from input structure (struct) into OC file 
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Writes output control file
+% Consult MODFLOW 2005 documentation for description of file formatting. 
+% Data is written from input structure (struct) into OC file 
 filename=struct.NAM.filename;
 NPER=struct.DIS.NPER;
 NSTP=struct.DIS.NSTP;

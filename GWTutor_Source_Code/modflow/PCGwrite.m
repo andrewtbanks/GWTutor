@@ -1,7 +1,10 @@
 function [] = PCGwrite(struct)
-% write pcg file - solver options
-% consult MODFLOW 2005 documentation for description of file formatting. 
-% data is written from input structure (struct) into PCG file 
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Writes pcg file - solver options
+% Consult MODFLOW 2005 documentation for description of file formatting. 
+% Data is written from input structure (struct) into PCG file 
 
 filename=struct.NAM.filename;
 MXITER=struct.PCG.MXITER;%maximum number of iterations to call for PCG solution routine

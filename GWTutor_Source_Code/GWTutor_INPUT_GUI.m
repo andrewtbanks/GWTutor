@@ -1,4 +1,6 @@
-function [ varargout] = ex1_tabs(varargin)
+function [ varargout] = GWTutor_INPUT_GUI(varargin)
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% Handles plotting and GUI features for GWTutor Input screen  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ex1_tabs: Function For GWTutor Inuput GUI screen 
 
@@ -1889,17 +1891,17 @@ MFin.KC = dis.KC;
 MFin.KV = dis.KV;
 MFin.quasiKV=zeros(MFin.nrow,MFin.ncol,MFin.nlay); %hydraulic conductivity for quasi 3d confing layers
 MFin.H0 = dis.H;
-MFin.nper = dis.nper; %number of stress periods.
-MFin.perlen = repmat(dis.perlen,dis.nper,1); % period length (days)
-MFin.nsteps = repmat(dis.nsteps,dis.nper,1); %number of solver calls per step
-MFin.TrSs = repmat({'Tr'},dis.nper,1); %
+MFin.nper = dis.nper+1; %number of stress periods.
+MFin.perlen = repmat(dis.perlen,MFin.nper,1); % period length (days)
+MFin.nsteps = repmat(dis.nsteps,MFin.nper,1); %number of solver calls per step
+MFin.TrSs = repmat({'Tr'},MFin.nper,1); %
 
 MFin.nwell = 1;
-MFin.welllayer = repmat([1 ],dis.nper,1);
-MFin.wellcol = repmat(dis.Qcol ,dis.nper,1);
-MFin.wellrow = repmat(dis.Qrow ,dis.nper,1);
-MFin.Q = repmat(dis.q ,dis.nper,1);
-MFin.rech = repmat(dis.RCH, 1,1,dis.nper);
+MFin.welllayer = repmat([1 ],MFin.nper,1);
+MFin.wellcol = repmat(dis.Qcol ,MFin.nper,1);
+MFin.wellrow = repmat(dis.Qrow ,MFin.nper,1);
+MFin.Q = repmat(dis.q ,MFin.nper,1);
+MFin.rech = repmat(dis.RCH, 1,1,MFin.nper);
 MFin.PauseBat = 'exit';
 MFin.filename = 'gui_ex1';
 MFin.dumrun = 0;
@@ -1907,10 +1909,9 @@ MFout = Format_ModFlow(MFin);
 
 
 %make first period steady state
- MFin.Q(1) = 0;
-% MFin.rech(:,:,1) = 0;
+MFin.Q(1) = 0;
 MFin.TrSs(1) = {'Ss'};
-
+MFin.perlen(1) = 0.1% set SS stress period length to be very short 
 
 
 %modpath

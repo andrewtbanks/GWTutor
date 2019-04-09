@@ -1,8 +1,10 @@
 function[]=NAMwrite(struct)
-
-%WRITES MODFLOW NAM FILE
-% consult MODFLOW 2005 documentation for description of file formatting. 
-% data is written from input structure (struct) into NAM file 
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Writes MODFLOW name file 
+% Consult MODFLOW 2005 documentation for description of file formatting. 
+% Data is written from input structure (struct) into NAM file 
 
 
 filename=struct.NAM.filename;

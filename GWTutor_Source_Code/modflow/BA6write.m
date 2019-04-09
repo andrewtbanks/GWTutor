@@ -1,9 +1,13 @@
 function [] = BA6write(struct)
-% consult MODFLOW 2005 documentation for description of file formatting. 
-% data is written from input structure (struct) into BA6 file 
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Writes BAS6 file - MODFLOW basic flow processes package
+% Consult MODFLOW 2005 documentation for description of file formatting. 
+% Data is written from input structure (struct) into BA6 file 
 
 
-%VARIABLES
+%% VARIABLES
 
 
 filename=struct.NAM.filename;

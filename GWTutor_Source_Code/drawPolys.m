@@ -1,7 +1,11 @@
 function [ dis ] = drawPolys(dis)
-%% draws a set of polygons describing the saturated thickness of the aquifer
-%% uses base elevation of aquifer and current heads to draw a polygon for each cell 
-%% returns dis structure contating polygon verticies for the 3-D grids in the GUI
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Used by GWTutor_INPUT_GUI.m and GWTutor_OUTPUT_GUI.m
+% Draws a set of polygons describing the saturated thickness of the aquifer
+% Uses base elevation of aquifer and current heads to draw a polygon for each cell 
+% Returns dis structure contating polygon verticies for the 3-D grids in the GUI
 
 % x verticies for top/bot cell faces
  for j = 1:dis.ncol 

@@ -1,5 +1,8 @@
 function [] = BATwrite(struct)
-% write .bat file to execute MODFLOW model 
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Writes .bat file to execute MODFLOW model 
 
 
 filename=struct.NAM.filename; %name of batch file

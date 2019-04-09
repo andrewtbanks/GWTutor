@@ -1,11 +1,13 @@
 function [] = WELwrite(struct)
-% consult MODFLOW 2005 documentation for description of file formatting. 
-% data is written from input structure (struct) into WEL file 
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Writes WEL file - MODFLOW well package 
+% Consult MODFLOW 2005 documentation for description of file formatting. 
+% Data is written from input structure (struct) into WEL file 
 
-%filename=first part of file name (ex for test.NAM input filename='test')
-%pos=well position (symmeptric ie input is at position (pos,pos); 
 
-%VARIBLES
+%% VARIBLES
 filename=struct.NAM.filename;
 Q=struct.WEL.Q; %pumpage at position specified by pos
 MXACTW=struct.WEL.MXACTW;%maximum number of wells in use during any stress period (=1 for now);

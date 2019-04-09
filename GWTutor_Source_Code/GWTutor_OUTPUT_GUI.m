@@ -1,8 +1,16 @@
-function [ MFfig ] = CE_demo_MF( dis,plt,MFin,MPin)
-%dum = []; % dummy variable 
+function [ MFfig ] = GWTutor_OUTPUT_GUI( dis,plt,MFin,MPin)
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% function controls plotting and GUI features for visualizing output from MODFLOW and MODPATH
+% Works in conjunction with GWTutor_INPUT_GUI.m (GWTutor_OUTPUT_GUI.m called at end of script)
+
+
 
 %%  Run modflow 
 % build waitbar 
+
+%dum = []; % dummy variable 
 wb = waitbar(0,'Format and Write MODFLOW 2005 Input Files','Position',[800 700 300 50]); 
 MFout = Format_ModFlow(MFin);% format data for modflow input files
 
@@ -105,15 +113,19 @@ end
 % for every timestep, determine which zone each particle is in  
 dis.xposCent(dis.Qcol) 
 dis.yposCent(dis.Qrow) 
-            
+
+% paths for each group
 MP.PathsA = MP.Paths(:,:,1:MPin.ParticleCountA);
 MP.PathsB = MP.Paths(:,:,size(MP.PathsA,3)+1:size(MP.PathsA,3)+MPin.ParticleCountB);
 MP.PathsC = MP.Paths(:,:,2*size(MP.PathsA,3)+1:2*size(MP.PathsA,3)+MPin.ParticleCountC);
 
+% status for each group (terminated at well, terminated at boundary or active] 
 statusA = status(1:MPin.ParticleCountA);
 statusB = status(size(MP.PathsA,3)+1:size(MP.PathsA,3)+MPin.ParticleCountB);
 statusC = status(2*size(MP.PathsA,3)+1:2*size(MP.PathsA,3)+MPin.ParticleCountC);
 
+% counters for how many particles from each group have terminated at each
+% stop zone ( 3 stop zones, 3 groups) 
 stopCntIndA = stopCntInd(1:MPin.ParticleCountA);
 stopCntIndB = stopCntInd(size(MP.PathsA,3)+1:size(MP.PathsA,3)+MPin.ParticleCountB);
 stopCntIndC = stopCntInd(2*size(MP.PathsA,3)+1:2*size(MP.PathsA,3)+MPin.ParticleCountC);
@@ -332,11 +344,28 @@ well_txt = annotation(MPTab,'textbox','Position',[.84 .492 .100 .10],'Units','no
 overlay_popup = uicontrol('Style','popup','Position',[160 620 150 50],'Units','normalized','String',{['Hydraulic Head (H)'];['Hydraulic Conductivity']},'Value',1,'Visible','on','Callback',@MPoverlay_Callback,'ForegroundColor','black','Parent',MPTab);
 
 function MPoverlay_Callback(source,events)
+    % functions displays either heads or hydraulic conductivitues
+    % underneath  particle trajcetories depending on popup button values 
        n = ceil(MPtime_slider.Value);
+       
+
+        if n == 0 
+            MPtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str(0),' Days'];
+%         elseif n == 1 
+%              MPtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str(0),' Days'];
+        elseif n == MFin.nper
+            MPtime_slider_txt.String = 'suggit'%['Time Elapsed: \bf \it  ', num2str((MFin.nper-1)*dis.perlen),' Days'];
+            n = n-1
+        elseif n == MPtime_slider.Value 
+            MPtime_slider_txt.String = 'bish'%['Time Elapsed: \bf \it  ', num2str(MFin.nper*dis.perlen),' Days'];
+            n = n-1
+        else 
+            MPtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str((n)*dis.perlen),' Days'];
+        end
         
-        MPtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str(n*dis.perlen),' Days'];
+        %MPtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str(n*dis.perlen),' Days'];
         
-        n = n+1;
+        n = n+1;% skips first timestep (for plotting)
         
         cla(MPax);
         axes(MPax);
@@ -368,12 +397,25 @@ function MPoverlay_Callback(source,events)
 
 end
 function MFtime_slider_Callback(source,events)
-
+% slider that updates heads based on the time slider) 
          cla(MFax)
         axes(MFax)
         n = ceil(MFtime_slider.Value);
         
-        MFtime_slider_txt.String = ['Time Elapsed \bf \it: ', num2str(n*dis.perlen),' Days'];
+        if n == 0 
+            MFtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str(0),' Days'];
+        elseif n == 1 
+            MFtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str(0),' Days'];
+        elseif n == MFin.nper-1
+            MFtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str((MFin.nper-1)*dis.perlen),' Days'];
+            n = n-1
+        elseif n == MPtime_slider.Value 
+            MFtime_slider_txt.String = 'bish'%['Time Elapsed: \bf \it  ', num2str(MFin.nper*dis.perlen),' Days'];
+            n = n-1
+        else 
+            MFtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str((n-1)*dis.perlen),' Days'];
+        end
+%        MFtime_slider_txt.String = ['Time Elapsed \bf \it: ', num2str((n-1)*dis.perlen),' Days'];
         IC_text.Visible = 'off';
         
         
@@ -466,7 +508,19 @@ function MPtime_slider_Callback(source,events)
     
 n = ceil(MPtime_slider.Value);
 norig = n;
-MPtime_slider_txt.String = ['Time Elapsed: \bf \it ', num2str(n*dis.perlen),' Days'];
+
+% if n == 1 
+%     MPtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str(0),' Days'];
+if n == 0 
+    MPtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str(0),' Days'];
+elseif n == MFin.nper
+    MPtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str((MFin.nper-1)*dis.perlen),' Days'];
+    n = n-1
+else 
+    MPtime_slider_txt.String = ['Time Elapsed: \bf \it  ', num2str((n)*dis.perlen),' Days'];
+end
+
+%MPtime_slider_txt.String = ['Time Elapsed: \bf \it ', num2str((n)*dis.perlen),' Days'];
 n = n+1;
 
        if MFin.laytyp == 0 %if unconfined
@@ -624,11 +678,7 @@ n = n+1;
            boundstopB = sum(boundstopBind~=0);              
            wellstopB = sum(wellstopBind~=0) ;
            activeB    = MPin.ParticleCountB - (boundstopB + wellstopB);
-            
-%             wellstopB = sum(numel(wellstopBind));
-%             boundstopB = sum(numel(boundstopBind));
-%             activeB    = MPin.ParticleCountB - numel(numstopB);
-            
+           
         else
             wellstopB = 0;
             boundstopB = 0;
@@ -637,9 +687,7 @@ n = n+1;
         end
         
         % for particle group C
-        
         if isempty(numstopC)==0
-
             for i = 1:length(numstopC)
                         
                  if isempty(numstopWellC)==1 || isempty(find(numstopWellC == numstopC(i)))==1
@@ -675,14 +723,9 @@ n = n+1;
         
         particle_data = {activeA,wellstopA,boundstopA,MPin.ParticleCountA ; activeB,wellstopB,boundstopB,MPin.ParticleCountB ; activeC,wellstopC,boundstopC,MPin.ParticleCountC ; active,wellstop,boundstop,MPin.ParticleCount};
         Particle_data_table.Data = particle_data;
-        
-%         patch(dis.PolyX,dis.PolyY,dis.PolyZ(:,:,1),[1 1 1],'FaceAlpha',.2,'EdgeAlpha',.2,'Visible','on','Parent',MPax);
-          
+               
    n = norig;
 
-   
-
-   
    if n >= 1 && hide_stop_well_check.Value == 1
     
       ParticlePosA =   scatter3(MPax,MP.PathsA(1,n,numactiveA),dis.Ly-MP.PathsA(2,n,numactiveA),MP.PathsA(3,n,numactiveA),10,dis.PcolorA,'filled');
@@ -712,14 +755,11 @@ n = n+1;
            end                             
          end
     
-   elseif n >= 1 && hide_stop_well_check.Value == 0 % if hide_stop check value is 0;
-        
+   elseif n >= 1 && hide_stop_well_check.Value == 0 % if hide_stop check value is 0;       
       ParticlePosA = scatter3(MPax,MP.PathsA(1,n,:),dis.Ly-MP.PathsA(2,n,:),MP.PathsA(3,n,:),10,dis.PcolorA,'filled');
       ParticlePosB =scatter3(MPax,MP.PathsB(1,n,:),dis.Ly-MP.PathsB(2,n,:),MP.PathsB(3,n,:),10,dis.PcolorB,'filled');
-      ParticlePosC =scatter3(MPax,MP.PathsC(1,n,:),dis.Ly-MP.PathsC(2,n,:),MP.PathsC(3,n,:),10,dis.PcolorC,'filled');
-       
+      ParticlePosC =scatter3(MPax,MP.PathsC(1,n,:),dis.Ly-MP.PathsC(2,n,:),MP.PathsC(3,n,:),10,dis.PcolorC,'filled');      
        if pathline_check.Value == 1  
-
                for i=1:MPin.ParticleCountA
                 plot3(MPax, [reshape(permute(MP.PathsA(1,1:n,i),[3,1,2]),[],1)],[reshape(permute(dis.Ly-MP.PathsA(2,1:n,i),[3,1,2]),[],1);],[reshape(permute(MP.PathsA(3,1:n,i),[3,1,2]),[],1);],'Color',dis.PcolorA)
                end
@@ -738,18 +778,14 @@ n = n+1;
    if n == 0 
       ParticlePosA = scatter3(MPax,MP.PathsA(1,1,:),dis.Ly-MP.PathsA(2,1,:),MP.PathsA(3,1,:),10,dis.PcolorA,'filled');
       ParticlePosB = scatter3(MPax,MP.PathsB(1,1,:),dis.Ly-MP.PathsB(2,1,:),MP.PathsB(3,1,:),10,dis.PcolorB,'filled');
-      ParticlePosC = scatter3(MPax,MP.PathsC(1,1,:),dis.Ly-MP.PathsC(2,1,:),MP.PathsC(3,1,:),10,dis.PcolorC,'filled');
-       
-   end
-   
+      ParticlePosC = scatter3(MPax,MP.PathsC(1,1,:),dis.Ly-MP.PathsC(2,1,:),MP.PathsC(3,1,:),10,dis.PcolorC,'filled');       
+   end  
    if well_check.Value == 1
    WellPosLine = plot3(MPax,[dis.xposCent(dis.Qcol) dis.xposCent(dis.Qcol)],[dis.yposCent(dis.Qrow) dis.yposCent(dis.Qrow)],[dis.LzBot,dis.LzTop],'Color',[1 0.2 0.2],'LineWidth',3);
    WellPosDot = scatter3(MPax,[dis.xposCent(dis.Qcol) ],[dis.yposCent(dis.Qrow) ],[dis.LzTop],100,[1 0.2 0.2],'filled','MarkerEdgeColor','Black','LineWidth',1.3);
-   end  
-  
+   end    
 end   
   
-
 %save('tempMF','disH','mpath','MP')
 
 mainfigH.Visible = 'on';

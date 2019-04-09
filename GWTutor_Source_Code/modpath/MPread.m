@@ -1,5 +1,9 @@
 function [out] = MPread( MPstruct,type)
-% read  particle trajcetories from MODPATH output
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Reads  particle trajcetories from MODPATH output
+% See MODPATH 6 documentation for structure of files read by this function 
 
 % type indicates what output is returned (always reads endpoint,reads timeseries if type = 'timeseries') 
 filename=MPstruct.MPNAM.filename;

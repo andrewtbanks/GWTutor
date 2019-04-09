@@ -1,7 +1,10 @@
 function [] = DISwrite(struct)
-%Specify and write DIS file (grid size and dimension and stress period )
-% consult MODFLOW 2005 documentation for description of file formatting. 
-% data is written from input structure (struct) into DIS file 
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Write DIS file - MODFLOW discretization file 
+% Consult MODFLOW 2005 documentation for description of file formatting. 
+% Data is written from input structure (struct) into DIS file 
 
 %VARIABLES TO SPECIFY
 %NLAY,NROW,NCOL,DELR,DELC,TOP,BOT,PERLEN-stress period length, 

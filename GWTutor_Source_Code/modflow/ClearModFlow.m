@@ -1,4 +1,7 @@
 function [  ] = ClearModFlow(filename)
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % deletes any modflow files in current directory with matching filename
 [out,msg,msgID]=rmdir([pwd,'\',filename],'s');
 

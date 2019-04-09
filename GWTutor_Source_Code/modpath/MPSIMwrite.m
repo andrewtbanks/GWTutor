@@ -1,4 +1,7 @@
 function [] = MPSIMwrite(MFstruct,MPstruct)
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Writes MPSIM -Modpath simulation file
 % consult MODPATH 6  documentation for description of file formatting. 
 % data is written from input structure (MPstruct) into MPSIM file 

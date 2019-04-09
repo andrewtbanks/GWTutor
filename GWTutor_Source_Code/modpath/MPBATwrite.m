@@ -1,5 +1,9 @@
 function [ output_args ] = MPBATwrite( MPstruct )
-% writes batch file to execute MODPATH model
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Writes batch file to execute MODPATH model
+
 
 filename=MPstruct.MPNAM.filename; %name of batch file
 pause=MPstruct.MPBAT.PAUSE;

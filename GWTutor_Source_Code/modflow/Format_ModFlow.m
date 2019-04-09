@@ -1,10 +1,10 @@
 function [ struct ] = Format_ModFlow(in)
-% formats input data from GUI into a structure readable by functions that
-% write modflow input files. 
-
-% data is sorted based on what modflow input files it corresponds to) 
-% variable names in the output strucutre(struct) match very closely to what is
-% used in the MODFLOW 2005 documentation.
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formats input data from GUI into a structure readable by functions that write modflow input files. 
+% Data is sorted based on what modflow input files it corresponds to) 
+% Variable names in the output strucutre(struct) match very closely to what is used in the MODFLOW 2005 documentation.
 
 %% BAT execution
 if in.dumrun==0 % dumrun variable toggles whether the .bat file insetrs a puase after execution 

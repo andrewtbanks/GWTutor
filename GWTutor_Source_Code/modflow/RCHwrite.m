@@ -1,7 +1,10 @@
 function [struct ] = RCHwrite( struct )
+% Author: Andy Banks 2019 - Univeristy of Kansas Dept of Geology 
+% GWTutor MODFLOW/MODPATH support library 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Write RCH file - recharge package
-% consult MODFLOW 2005 documentation for description of file formatting. 
-% data is written from input structure (struct) into RCH file 
+% Consult MODFLOW 2005 documentation for description of file formatting. 
+% Data is written from input structure (struct) into RCH file 
 filename=struct.NAM.filename;
 NPRCH=struct.RCH.NPRCH;%in.nprch;
 NRCHOP=struct.RCH.NRCHOP; %recharge option code (1== recharge only to top grid layer)
