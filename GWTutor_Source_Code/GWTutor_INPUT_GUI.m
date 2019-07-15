@@ -176,7 +176,7 @@ end
 % callback function. 
 
 % init figure and axis
-mainfig = figure('Visible','off','Position',[0 0 1000 1000],'Name','GW Tutor -- Input','NumberTitle','off');
+mainfig = figure('Visible','off','Position',[0 0 1000 1000],'Name','GroundWater Tutor -- Input','NumberTitle','off');
 mainax = axes('Visible','on','Units','Normalized','position',[0.15 0.15  .6 .6],'Color','none','YDir','reverse','XAxisLocation','top','TickDir','out','PlotBoxAspectRatio',[dis.LxNrm dis.LyNrm dis.LzNrm],'FontSize',8,'LabelFontSizeMultiplier',1.5); 
 
 
@@ -916,14 +916,7 @@ if isempty(currSY) == 1% check if edit box is empty
     currSY = ceil(SS_slider.Value);
     SS_edit.String = num2str(currSS);
 end
-% check if param value is within tolerated limits 
-if currSY > dis.SYmax
-    currSY = dis.SYmax;
-elseif currSY < dis.SYmin
-    currSY = dis.SYmin;
-end
-SY_edit.String = num2str(currSY);
-SY_slider.Value = currSY;
+
 
 % Porosity
 currP = str2num(P_edit.String);
@@ -940,10 +933,31 @@ end
 P_edit.String = num2str(currP);
 P_slider.Value = currP;
 
+% check if param value is within tolerated limits 
+error =0
+if currSY > dis.SYmax
+    currSY = dis.SYmax;
+elseif currSY < dis.SYmin
+    currSY = dis.SYmin;
+elseif currSY> currP
+    %msgbox_SY = errordlg('Specific yeild must be less than or equal to porosity','Invalid Value')
+    error = 1
+    currSY = dis.Pinit
+end
+
+
+SY_edit.String = num2str(currSY);
+SY_slider.Value = currSY;
+
 %callback corresponding sliders
 param_slider_Callback;
 initial_slider_Callback;
 source_slider_Callback;
+
+if error ==1 
+    msgbox_SY = errordlg('Specific yeild must be less than or equal to porosity. Setting specific yeild equal to porosity','Invalid Value')
+    error = 0
+end 
 
 end
 %% PARAM SLIDER CALLBACK (get values from 'slider' uicontrols for parameters K,SS,SY,porosity)
@@ -1052,17 +1066,7 @@ plt.XYZbotSS.CData = SSval*dis.PolyZSS;
 
 dis.SS=dis.SSvals(SSscale)*dis.SSbase;
 
-% update base sy
-SYval = round(SY_slider.Value,2);
-SY_edit.String = num2str(SYval);
-plt.XYZleftSY.CData = SYval*dis.PolyZSY;
-plt.XYZrightSY.CData = SYval*dis.PolyZSY;
-plt.XYZforSY.CData = SYval*dis.PolyZSY;
-plt.XYZbackSY.CData = SYval*dis.PolyZSY;
-plt.XYZtopSY.CData = SYval*dis.PolyZSY;
-plt.XYZbotSY.CData = SYval*dis.PolyZSY;
 
-dis.SY=SYval*dis.SYbase;
 
 % update porosity 
 Pval = round(P_slider.Value,2);
@@ -1076,8 +1080,35 @@ plt.XYZbotP.CData = Pval*dis.PolyZP;
 
 dis.Porosity=Pval*dis.PorosityBase;
 
+SYval = round(SY_slider.Value,2);
 
+error = 0
+if SYval> Pval
+    currSY = dis.SYinit
+    %msgbox_SY = errordlg('Specific yeild must be less than or equal to porosity','Invalid Value')
+    error = 1
+end
+% update base sy
+if error ==1
+   SYval = Pval
+   SY_slider.Value = Pval
+else
+   SYval = round(SY_slider.Value,2);
+end
 
+SY_edit.String = num2str(SYval);
+plt.XYZleftSY.CData = SYval*dis.PolyZSY;
+plt.XYZrightSY.CData = SYval*dis.PolyZSY;
+plt.XYZforSY.CData = SYval*dis.PolyZSY;
+plt.XYZbackSY.CData = SYval*dis.PolyZSY;
+plt.XYZtopSY.CData = SYval*dis.PolyZSY;
+plt.XYZbotSY.CData = SYval*dis.PolyZSY;
+dis.SY=SYval*dis.SYbase;  
+
+if error ==1 
+    msgbox_SY = errordlg('Specific yeild must be less than or equal to porosity. Setting specific yeild equal to porosity','Invalid Value')
+    error = 0
+end 
 
 %% update slider texts
 

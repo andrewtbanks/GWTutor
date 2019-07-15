@@ -160,7 +160,8 @@ particleCind = MPin.ParticleCountA+MPin.ParticleCountB +1:MPin.ParticleCount;
 
 %% Make figure and tabs
 
-MFfig = figure('Visible','off','Position',[600  0 800 800],'Name','Interactive Groundwater Module -- Output','NumberTitle','off');
+MFfig = figure('Visible','off','Position',[600  0 800 800],'Name','GroundWater Tutor -- Output','NumberTitle','off','Color',[0,0,0]);
+
 
 AxVisible = 'on';
 AxUnits = 'normalized';
@@ -173,14 +174,18 @@ AxPlotBoxAspectRatio = [dis.LxNrm dis.LyNrm .3];
 AxFontSize = 8;
 AxLabelFontSizeMultiplier = 1.5; 
 AxTitleFontSizeMultiplier = 2;
-% bgImg = imread('background.jpg');
+
 tgroupInit = uitabgroup('Parent',MFfig);
 
 
 % modflow results tab
 MFTab = uitab('Parent', tgroupInit, 'Title', 'Hydraulic Head');
+
+% add background image % 
+% bgImg = imread('background.jpg');
 % backgroundax = axes('units','normalized','position',[0 0 1 1],'Parent',MFTab);
 % uistack(backgroundax,'bottom'); imagesc(bgImg); set(backgroundax,'handlevisibility','off','visible','off');
+
 MFax = axes('Visible',AxVisible,'Units',AxUnits,'position',AxPosition,'Color',AxColor,'YDir',AxYdir,'XAxisLocation',AxXAxisLocation,'TickDir',AxTickDir,'PlotBoxAspectRatio',AxPlotBoxAspectRatio,'FontSize',AxFontSize,'LabelFontSizeMultiplier',AxLabelFontSizeMultiplier,'TitleFontSizeMultiplier',AxTitleFontSizeMultiplier); 
 MFax.Parent = MFTab;
 set(gca,'color','none') 
@@ -198,7 +203,13 @@ zlabel(MFax,'Z_d_i_s_t (m)');
 % modpath results tab
 MPTab = uitab('Parent', tgroupInit, 'Title', 'Particle Tracking');
 MPax = axes('Visible',AxVisible,'Units',AxUnits,'position',AxPosition,'Color',AxColor,'YDir',AxYdir,'XAxisLocation',AxXAxisLocation,'TickDir',AxTickDir,'PlotBoxAspectRatio',AxPlotBoxAspectRatio,'FontSize',AxFontSize,'LabelFontSizeMultiplier',AxLabelFontSizeMultiplier);
-set(gca,'color','none') 
+set(gca,'color','none')
+
+% set background image
+%bgImg = imread('background.png');
+%backgroundax2 = axes('units','normalized','position',[0 0 1 1],'Parent',MPTab);
+%uistack(backgroundax2,'bottom'); imagesc(bgImg); set(backgroundax2,'handlevisibility','off','visible','off');
+
 MPax.Parent = MPTab;
 camerapos = [15034/11       56744/15       25167/19  ];
 set(MPax,'XLim',[0 dis.Lx]); set(MPax,'YLim',[0 dis.Ly]); set(MPax,'ZLim',[0 dis.LzTop],'CameraPosition',camerapos);
